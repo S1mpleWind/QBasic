@@ -10,10 +10,18 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    ui\mainwindow.cpp
+    ui\mainwindow.cpp\
+    core\program.cpp\
+    core\exp.cpp\
+    core\statement.cpp\
+    runtime\evalstate.cpp
 
 HEADERS += \
-    ui\mainwindow.h
+    ui\mainwindow.h\
+    core\program.h\
+    core\exp.h\
+    core\statement.h\
+    runtime\evalstate.h
 
 FORMS += \
     ui\mainwindow.ui

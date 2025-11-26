@@ -38,6 +38,8 @@ void MainWindow::on_btnClearCode_clicked()
 
     //reset ui
     ui->CodeDisplay->setText("");
-    //TODO:clear the program structure
+    ui->treeDisplay->setText(""); // TODO: should clear the datastructure and update automatically
+
+    //TODO:clear the program structure / sytax tree
 
 }
