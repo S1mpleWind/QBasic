@@ -44,6 +44,7 @@ CompoundExp::~CompoundExp() {
 }
 
 int CompoundExp::eval(EvalState &state) {
+    // recursion
     int left = lhs->eval(state);
     int right = rhs->eval(state);
 

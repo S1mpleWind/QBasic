@@ -12,6 +12,10 @@
 
 #include "../runtime/evalstate.h"
 // Base class of Expression（表达式的基类）
+
+// used to differentiate the type of subclasses
+enum ExpressionType {CONSTANT, IDENTIFIER, COMPOUND};
+
 class Expression {
 public:
     virtual ~Expression() = default;
@@ -21,6 +25,21 @@ public:
 
     // toString() — Convert expression to text（表达式转为字符串，用于调试）
     virtual std::string toString() const = 0;
+
+    virtual ExpressionType type() = 0;
+
+
+    /* Getter mothods for convenience
+     *
+     TO be done
+
+     */
+
+    virtual int getConstantValue();
+    virtual std::string getIdentifierName();
+    virtual std::string getOperator();
+    virtual Expression* getLHS();
+    virtual Expression* getRHS();
 };
 
 
