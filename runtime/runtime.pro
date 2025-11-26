@@ -10,10 +10,9 @@ LIBS += \
 
 SOURCES += evalstate.cpp \
            parser.cpp \
-           tokenizer.cpp \
-           parser.cpp
+           tokenizer.cpp
 
 HEADERS += evalstate.h \
            parser.h \
            tokenizer.h \
-           parser.h
+           token.h

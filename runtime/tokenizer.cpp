@@ -1,5 +1,6 @@
 #include "tokenizer.h"
 #include <cctype>
+//#include <iostream>
 
 Tokenizer::Tokenizer(const std::string &line)
     : src(line), pos(0) {}
@@ -8,7 +9,11 @@ void Tokenizer::reset() {
     pos = 0;
 }
 
-bool Tokenizer::hasMoreToken() const {
+bool Tokenizer::hasMoreToken()  {
+    //Found by unit test
+    //std::cout<<pos;
+    skipSpaces();
+    //std::cout<<pos;
     return pos < (int)src.size();
 }
 

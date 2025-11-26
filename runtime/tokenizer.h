@@ -19,7 +19,7 @@ public:
 
     Token getNextToken();      // fetch one token
     void reset();              // reset the cursor
-    bool hasMoreToken() const;
+    bool hasMoreToken();
 
 private:
     std::string src;
