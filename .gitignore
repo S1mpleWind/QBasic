@@ -1,4 +1,5 @@
 build
+debug
 Makefile
 Makefile.Debug
 Makefile.Release
