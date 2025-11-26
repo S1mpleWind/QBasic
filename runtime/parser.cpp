@@ -107,7 +107,7 @@ Statement* Parser::parseRem(Tokenizer &tokenizer) {
 }
 
 
-//----------------- 表达式解析 -----------------
+//----------------- parse the expression -----------------
 
 Expression* Parser::parseExpression(Tokenizer &tokenizer) {
     Token t = tokenizer.getNextToken();

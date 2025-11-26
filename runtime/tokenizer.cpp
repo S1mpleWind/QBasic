@@ -17,9 +17,16 @@ bool Tokenizer::hasMoreToken()  {
     return pos < (int)src.size();
 }
 
-char Tokenizer::peek() const {
+char Tokenizer::current()const{
     if (pos >= (int)src.size()) return '\0';
     return src[pos];
+}
+
+Token Tokenizer::peekToken() {
+    int origin = pos;
+    Token t = getNextToken();
+    pos = origin;
+    return t;
 }
 
 char Tokenizer::get() {
@@ -29,13 +36,13 @@ char Tokenizer::get() {
 
 void Tokenizer::skipSpaces() {
     //jump the extra spaces that might appear
-    while (std::isspace(peek())) get();
+    while (std::isspace(current())) get();
 }
 
 /*general call of getting the next token*/
 Token Tokenizer::getNextToken() {
     skipSpaces();
-    char c = peek();
+    char c = current();
     if (c == '\0') return Token(TokenType::END_OF_LINE, "");
 
     // number
@@ -50,13 +57,13 @@ Token Tokenizer::getNextToken() {
 
 Token Tokenizer::readNumber() {
     std::string result;
-    while (std::isdigit(peek())) result += get();
+    while (std::isdigit(current())) result += get();
     return Token(TokenType::NUMBER, result);
 }
 
 Token Tokenizer::readIdentifier() {
     std::string result;
-    while (std::isalnum(peek())) result += get();
+    while (std::isalnum(current())) result += get();
 
     // recognize the key word:LET, PRINT, INPUT, GOTO, IF, THEN, END
     std::string upper;
@@ -67,6 +74,9 @@ Token Tokenizer::readIdentifier() {
         return Token(TokenType::KEYWORD, upper);
     }
 
+    //NOTE : because 'mod' is alse a string , it is handled here
+    else if (upper == "MOD") return Token(TokenType::OPERATOR, upper);
+
     return Token(TokenType::IDENTIFIER, result);
 }
 
@@ -74,12 +84,17 @@ Token Tokenizer::readOperator() {
     char c = get();
     std::string op(1, c);
 
-    // TODO:<= >= <>
-    char next = peek();
+    // TODO:<= >= <> "MOD" "**"
+    // NOTE: 'MOD' should handle the negative situations properly
+    // NOTE: '<>' means not equal
+    char next = current();
+
+    if ( c == '*' && next == '*') op+=next;
     if ((c == '<' || c == '>' || c == '=') &&
         (next == '=' || next == '>')) {
         op += get();
     }
+
 
     return Token(TokenType::OPERATOR, op);
 }

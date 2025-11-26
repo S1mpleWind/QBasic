@@ -63,10 +63,12 @@ CompoundExp::~CompoundExp() {
 }
 
 int CompoundExp::eval(EvalState &state) {
-    // recursion
+
+    // recursion here
     int left = lhs->eval(state);
     int right = rhs->eval(state);
 
+    // operation at the current stage
     if (op == "+") return left + right;
     if (op == "-") return left - right;
     if (op == "*") return left * right;
@@ -75,6 +77,24 @@ int CompoundExp::eval(EvalState &state) {
             throw std::runtime_error("DIVIDE BY ZERO");
         }
         return left / right;
+    }
+
+    //TODO: implement the operator "MOD" and "**"
+    // NOTE: 'MOD' should handle the negative situations properly
+
+    if (op == "**") return std::pow(left,right);
+
+    if (op == "MOD") {
+        if (right == 0) return 0;  // 避免除零
+
+        int result = left % right;
+
+        // adjust the sign
+        if ((right > 0 && result < 0) || (right < 0 && result > 0)) {
+            result += right;
+        }
+
+        return result;
     }
 
     throw std::runtime_error("UNKNOWN OPERATOR: " + op);

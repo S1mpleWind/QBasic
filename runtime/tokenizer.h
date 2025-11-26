@@ -25,8 +25,10 @@ private:
     std::string src;
     int pos;                   // current index
 
-    char peek() const;         // look into the next char
-    char get();                // fetch the char and move to the next one
+    Token peekToken();               // look into the next token & go back (not cosume)
+
+    char current() const;
+    char get();                // fetch the char and move to the next one (consume)
     void skipSpaces();
 
     Token readNumber();
