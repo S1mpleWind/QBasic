@@ -2,3 +2,4 @@ build
 Makefile
 Makefile.Debug
 Makefile.Release
+.qtc_clangd
