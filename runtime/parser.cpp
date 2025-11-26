@@ -3,13 +3,18 @@
 #include <stdexcept>
 
 Statement* Parser::parseLine(int lineNum, const std::string &line) {
+    //std::cout<<"entering line";
     Tokenizer tokenizer(line);
     if (!tokenizer.hasMoreToken()) return nullptr;
 
+    //std::cout<<"bf tk"<<std::endl;
     Token first = tokenizer.getNextToken();
+
+    //std::cout<<first.text;
 
     if (first.type == TokenType::KEYWORD) {
         if (first.text == "REM") {
+            //std::cout<<"rem situation";
             return parseRem(tokenizer);  // REM 处理
         }
         else if (first.text == "LET") {
@@ -109,13 +114,87 @@ Statement* Parser::parseRem(Tokenizer &tokenizer) {
 
 //----------------- parse the expression -----------------
 
-Expression* Parser::parseExpression(Tokenizer &tokenizer) {
-    Token t = tokenizer.getNextToken();
+// Recursive Descent Parsing
+
+Expression* Parser::parseExpression(Tokenizer &tk) {
+    Expression* exp = parseTerm(tk);
+    // call parseTerm so the , this will construct a kind of lower 'lhs'
+
+    while (tk.hasMoreToken()) {
+        Token t = tk.peekToken();
+
+        if (t.text == "+" || t.text == "-") {
+            tk.getNextToken();  // consume operator
+            Expression* rhs = parseTerm(tk);
+            exp = new CompoundExp(t.text, exp, rhs);
+        } else break;
+    }
+    return exp;
+}
+
+
+
+/* base case */
+
+Expression* Parser::parseTerm(Tokenizer &tk) {
+    Expression* exp = parsePower(tk);
+
+    while (tk.hasMoreToken()) {
+        Token t = tk.peekToken();
+
+        if (t.text == "*" || t.text == "/" || t.text == "MOD") {
+            tk.getNextToken();  // consume operator
+            Expression* rhs = parseFactor(tk);
+            exp = new CompoundExp(t.text, exp, rhs);
+        } else break;
+    }
+    return exp;
+}
+
+
+
+//Note: 'power' is right-combined
+
+Expression* Parser::parsePower(Tokenizer &tokenizer ){
+
+    Expression* base = parseFactor(tokenizer);
+
+    Token t = tokenizer.peekToken(); // do not cosume
+    if (t.text == "^" || t.text == "**") {
+        tokenizer.getNextToken();
+
+        Expression* exp = parsePower(tokenizer);   // right-recursive
+        base = new CompoundExp("^", base, exp);
+    }
+
+    return base;
+
+}
+
+
+
+Expression* Parser::parseFactor(Tokenizer &tk) // highest precedence
+{
+    Token t = tk.getNextToken();
+
+    // numbers/identifier
     if (t.type == TokenType::NUMBER) {
         return new ConstantExp(std::stoi(t.text));
-    } else if (t.type == TokenType::IDENTIFIER) {
-        return new IdentifierExp(t.text);
-    } else {
-        throw std::runtime_error("Invalid expression token: " + t.text);
     }
+    if (t.type == TokenType::IDENTIFIER) {
+        return new IdentifierExp(t.text);
+    }
+
+    // handle the Parentheses
+    if (t.text == "(") {
+        Expression* exp = parseExpression(tk);
+        Token r = tk.getNextToken();
+        if (r.text != ")") {
+            throw std::runtime_error("Missing ')'");
+        }
+        return exp;
+    }
+
+    throw std::runtime_error("Invalid factor: " + t.text);
 }
+

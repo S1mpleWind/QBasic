@@ -5,6 +5,7 @@
 #include "test_program.h"
 
 #include "test_tokenizer.h"
+#include "test_parser.h"
 
 int main() {
     std::cout << "Running Expression tests..." << std::endl;
@@ -19,6 +20,11 @@ int main() {
 
     std::cout << "\nRunning tokenizer tests..." << std::endl;
     testTokenizer();
+
+    std::cout << "\nRunning parser tests..." << std::endl;
+    int i = testParser();
+    assert(i==0);
+
 
     std::cout << "\nAll tests completed successfully!" << std::endl;
     return 0;

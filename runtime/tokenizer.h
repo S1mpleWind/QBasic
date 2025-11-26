@@ -17,7 +17,9 @@ class Tokenizer {
 public:
     explicit Tokenizer(const std::string &line);
 
-    Token getNextToken();      // fetch one token
+    Token getNextToken();      // fetch one token (read and consume)
+    Token peekToken();         // look into the next token & go back (not consume)
+
     void reset();              // reset the cursor
     bool hasMoreToken();
 
@@ -25,7 +27,6 @@ private:
     std::string src;
     int pos;                   // current index
 
-    Token peekToken();               // look into the next token & go back (not cosume)
 
     char current() const;
     char get();                // fetch the char and move to the next one (consume)

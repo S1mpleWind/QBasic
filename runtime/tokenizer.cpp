@@ -69,8 +69,9 @@ Token Tokenizer::readIdentifier() {
     std::string upper;
     for (char c : result) upper += std::toupper(c);
 
+    //FIXME: REM! found by unit test
     if (upper == "LET" || upper == "PRINT" || upper == "INPUT" ||
-        upper == "GOTO" || upper == "IF" || upper == "THEN" || upper == "END") {
+        upper == "GOTO" || upper == "IF" || upper == "THEN" || upper == "END" || upper == "REM") {
         return Token(TokenType::KEYWORD, upper);
     }
 
@@ -85,7 +86,6 @@ Token Tokenizer::readOperator() {
     std::string op(1, c);
 
     // TODO:<= >= <> "MOD" "**"
-    // NOTE: 'MOD' should handle the negative situations properly
     // NOTE: '<>' means not equal
     char next = current();
 

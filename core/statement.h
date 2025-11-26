@@ -31,6 +31,8 @@ class Statement {
 public:
     virtual ~Statement() {}
     virtual void execute(EvalState &state, Program &program) = 0;
+
+    virtual std::string toString() const = 0;
 };
 
 
@@ -43,6 +45,10 @@ class RemStmt : public Statement {
 public:
     RemStmt(const std::string &text);
     void execute(EvalState &state, Program &program) override;
+
+    std::string toString() const override {
+        return "REM " + text;
+    }
 
 private:
     std::string text;
@@ -59,6 +65,10 @@ public:
     LetStmt(const std::string &varName, Expression *exp);
     ~LetStmt();
     void execute(EvalState &state, Program &program) override;
+
+    std::string toString() const override {
+        return "LET " + var + " = " + exp->toString();
+    }
 
 private:
     std::string var;
@@ -77,6 +87,11 @@ public:
     ~PrintStmt();
     void execute(EvalState &state, Program &program) override;
 
+    std::string toString() const override {
+        return "PRINT " + exp->toString();
+    }
+
+
 private:
     Expression *exp;
 };
@@ -92,6 +107,10 @@ class InputStmt : public Statement {
 public:
     InputStmt(const std::string &varName);
     void execute(EvalState &state, Program &program) override;
+
+    std::string toString() const override {
+        return "INPUT " + var;
+    }
 
 private:
     std::string var;
@@ -109,6 +128,10 @@ public:
     GotoStmt(int targetLine);
     void execute(EvalState &state, Program &program) override;
 
+    std::string toString() const override {
+        return "GOTO " + std::to_string(target);
+    }
+
 private:
     int target;
 };
@@ -124,6 +147,11 @@ public:
     IfStmt(Expression *lhs, const std::string &op, Expression *rhs, int targetLine);
     ~IfStmt();
     void execute(EvalState &state, Program &program) override;
+
+    std::string toString() const override {
+        return "IF " + left->toString() + " " + op + " " + right->toString()
+        + " THEN " + std::to_string(target);
+    }
 
 private:
     Expression *left;
