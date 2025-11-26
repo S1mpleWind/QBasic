@@ -22,4 +22,6 @@ SOURCES += \
 HEADERS +=\
     test_expression.h \
     test_statement.h \
-    test_program.h
+    test_program.h \
+    test_tokenizer.h
+
