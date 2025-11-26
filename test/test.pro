@@ -1,7 +1,8 @@
 TEMPLATE = app
 TARGET = tests
 
-CONFIG += c++17 qt testcase
+QT += testlib      # ← 必须
+CONFIG += console testcase c++17
 
 INCLUDEPATH += \
     $$PWD \
@@ -9,10 +10,16 @@ INCLUDEPATH += \
     $$PWD/../runtime
 
 LIBS += \
-    -L$$PWD/../core/debug -lcore \
-    -L$$PWD/../runtime/debug -lruntime
-
-
+    -L$$PWD/../build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug/core/debug -lcore \
+    -L$$PWD/../build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug/runtime/debug -lruntime
 
 SOURCES += \
-    main.cpp
+    test_main.cpp \
+    test_expression.cpp \
+    test_statement.cpp \
+    test_program.cpp
+
+HEADERS +=\
+    test_expression.h \
+    test_statement.h \
+    test_program.h

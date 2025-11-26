@@ -35,11 +35,25 @@ public:
 
      */
 
-    virtual int getConstantValue();
-    virtual std::string getIdentifierName();
-    virtual std::string getOperator();
-    virtual Expression* getLHS();
-    virtual Expression* getRHS();
+    virtual int getConstantValue() {
+        throw std::runtime_error("getConstantValue() not implemented for this expression type");
+    }
+
+    virtual std::string getIdentifierName() {
+        throw std::runtime_error("getIdentifierName() not implemented for this expression type");
+    }
+
+    virtual std::string getOperator() {
+        throw std::runtime_error("getOperator() not implemented for this expression type");
+    }
+
+    virtual Expression* getLHS() {
+        throw std::runtime_error("getLHS() not implemented for this expression type");
+    }
+
+    virtual Expression* getRHS() {
+        throw std::runtime_error("getRHS() not implemented for this expression type");
+    }
 };
 
 
@@ -50,6 +64,9 @@ public:
 
     int eval(EvalState &state) override;
     std::string toString() const override;
+    ExpressionType type() override;
+
+    int getConstantValue() override;
 
 private:
     int value;
@@ -63,6 +80,10 @@ public:
 
     int eval(EvalState &state) override;
     std::string toString() const override;
+
+    ExpressionType type() override;
+
+    std::string getIdentifierName() override;
 
 private:
     std::string name;
@@ -78,6 +99,12 @@ public:
 
     int eval(EvalState &state) override;
     std::string toString() const override;
+
+    ExpressionType type() override;
+
+    std::string getOperator() override;
+    Expression* getLHS() override;
+    Expression* getRHS() override;
 
 private:
     std::string op;         // Operator — 运算符

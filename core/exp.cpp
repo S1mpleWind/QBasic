@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <sstream>
 
+
 // -------- ConstantExp --------
 
 ConstantExp::ConstantExp(int v) : value(v) {}
@@ -14,6 +15,16 @@ int ConstantExp::eval(EvalState &state) {
 std::string ConstantExp::toString() const {
     return std::to_string(value);
 }
+
+ExpressionType ConstantExp::type() {
+    return ExpressionType::CONSTANT;
+}
+
+int ConstantExp::getConstantValue(){
+    return value;
+}
+
+
 
 
 // -------- IdentifierExp --------
@@ -32,6 +43,14 @@ std::string IdentifierExp::toString() const {
     return name;
 }
 
+ExpressionType IdentifierExp::type() {
+    return ExpressionType::IDENTIFIER;
+}
+
+
+std::string IdentifierExp::getIdentifierName(){
+    return name;
+}
 
 // -------- CompoundExp --------
 
@@ -63,4 +82,20 @@ int CompoundExp::eval(EvalState &state) {
 
 std::string CompoundExp::toString() const {
     return "(" + lhs->toString() + " " + op + " " + rhs->toString() + ")";
+}
+
+ExpressionType CompoundExp::type() {
+    return ExpressionType::COMPOUND;
+}
+
+std::string CompoundExp::getOperator(){
+    return op;
+}
+
+Expression* CompoundExp::getLHS(){
+    return lhs;
+}
+
+Expression* CompoundExp::getRHS(){
+    return rhs;
 }

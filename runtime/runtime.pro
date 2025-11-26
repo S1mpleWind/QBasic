@@ -5,7 +5,8 @@ CONFIG += staticlib c++17
 INCLUDEPATH += $$PWD \
                $$PWD/../core
 
-LIBS += -L$$PWD/../core/debug -lcore
+LIBS += \
+    -L$$PWD/../build/Desktop_Qt_6_8_3_MSVC2022_64bit-Debug/core/debug -lcore
 
 SOURCES += evalstate.cpp \
            parser.cpp \
