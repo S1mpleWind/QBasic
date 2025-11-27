@@ -32,10 +32,11 @@ int ConstantExp::getConstantValue(){
 IdentifierExp::IdentifierExp(const std::string &n) : name(n) {}
 
 int IdentifierExp::eval(EvalState &state) {
-    // If variable not defined, throw error（变量未定义时报错）
+    // If variable not defined, throw error
     if (!state.isDefined(name)) {
         throw std::runtime_error("VARIABLE NOT DEFINED: " + name);
     }
+    useCount++;
     return state.getValue(name);
 }
 

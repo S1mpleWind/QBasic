@@ -23,6 +23,9 @@ LetStmt::~LetStmt() {
 }
 
 void LetStmt::execute(EvalState &state, Program &) {
+
+    execCount++;
+
     int value = exp->eval(state);
     state.setValue(var, value);
 }
@@ -39,6 +42,9 @@ PrintStmt::~PrintStmt() {
 
 void PrintStmt::execute(EvalState &state, Program &) {
     //std::cout << "print execute"<< std::endl;
+
+    execCount++;
+
     int value = exp->eval(state);
     std::cout << value << std::endl;
 }
@@ -51,6 +57,8 @@ InputStmt::InputStmt(const std::string &varName) : var(varName) {}
 
 void InputStmt::execute(EvalState &state, Program &) {
     int value;
+
+    execCount++;
 
     while (true) {
         std::cout << " ? ";
@@ -96,13 +104,22 @@ void IfStmt::execute(EvalState &state, Program &program) {
     int l = left->eval(state);
     int r = right->eval(state);
 
+    execCount++;
+
     bool cond = false;
     if (op == "=") cond = (l == r);
     else if (op == ">") cond = (l > r);
     else if (op == "<") cond = (l < r);
 
     if (cond) {
+
+        // TODO: syntax tree part
+        thenCount++;
         program.setNextLine(target);
+    }
+
+    else{
+        ifCount++;
     }
 }
 

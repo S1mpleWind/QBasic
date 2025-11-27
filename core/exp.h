@@ -29,10 +29,11 @@ public:
     virtual ExpressionType type() = 0;
 
 
-    /* Getter mothods for convenience
-     *
-     TO be done
+    //syntax tree
+    virtual std::string toSyntaxTree() const = 0;
 
+
+    /* Getter mothods for convenience
      */
 
     virtual int getConstantValue() {
@@ -54,6 +55,11 @@ public:
     virtual Expression* getRHS() {
         throw std::runtime_error("getRHS() not implemented for this expression type");
     }
+
+protected:
+    std::string indentHelper (int n) const{
+        return std::string( n*2 ,' ');
+    }
 };
 
 
@@ -67,6 +73,8 @@ public:
     ExpressionType type() override;
 
     int getConstantValue() override;
+
+    std::string toSyntaxTree() const override;
 
 private:
     int value;
@@ -85,8 +93,13 @@ public:
 
     std::string getIdentifierName() override;
 
+    int getCount() {return useCount;}
+
+    std::string toSyntaxTree() const override;
+
 private:
     std::string name;
+    int useCount = 0;
 };
 
 
@@ -105,6 +118,8 @@ public:
     std::string getOperator() override;
     Expression* getLHS() override;
     Expression* getRHS() override;
+
+    std::string toSyntaxTree() const override;
 
 private:
     std::string op;         // Operator — 运算符

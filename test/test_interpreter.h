@@ -26,7 +26,9 @@ void testInterpreter(){
     // parse the prag by hand
     p.addSourceLine(10, "LET X = 1");
     p.addSourceLine(20, "PRINT X");
-    p.addSourceLine(30, "END");
+    p.addSourceLine(30, "LET X = X + 1");
+    p.addSourceLine(40, "IF X < 5 THEN 20");
+    p.addSourceLine(50, "END");
     // p.addSourceLine(30, "LET X = X + 1");
     // p.addSourceLine(40, "IF X < 5 THEN 20");
     // p.addSourceLine(50, "END");
@@ -36,21 +38,43 @@ void testInterpreter(){
     //std::cout<<p.getDisplayText()<<std::endl;
 
     // 10 LET X = 1
-    p.setParsedStatement(
-        10,
-        new LetStmt("X", new ConstantExp(1))
-        );
+    p.setParsedStatement(10,
+                         new LetStmt(
+                             "X",
+                             new ConstantExp(1)
+                             )
+                         );
 
-    // 20 PRINT X
-    p.setParsedStatement(
-        20,
-        new PrintStmt(new IdentifierExp("X"))
-        );
+    p.setParsedStatement(20,
+                         new PrintStmt(
+                             new IdentifierExp("X")
+                             )
+                         );
 
-    p.setParsedStatement(
-        30,
-        new EndStmt()
-        );
+    p.setParsedStatement(30,
+                         new LetStmt(
+                             "X",
+                             new CompoundExp(
+                                 "+",
+                                 new IdentifierExp("X"),
+                                 new ConstantExp(1)
+                                 )
+                             )
+                         );
+
+    p.setParsedStatement(40,
+                         new IfStmt(
+                                 new IdentifierExp("X"),
+                                 "<",
+                                 new ConstantExp(5),
+                             20
+                             )
+                         );
+
+    p.setParsedStatement(50,
+                         new EndStmt()
+                         );
+
 
 
 
