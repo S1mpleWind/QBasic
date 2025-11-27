@@ -56,11 +56,14 @@ void testLineNavigation() {
     assert(prog.getNextLineNumber(30) == -1);
 
     cout << "[PASS] testLineNavigation" << endl;
+
+    cout<<"000";
 }
 
 void testExecutionControl() {
 
     Program prog;
+    cout<<"000";
     prog.setNextLine(10);
     assert(prog.getNextLine() == 10);
 

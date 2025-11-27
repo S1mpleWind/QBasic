@@ -38,6 +38,7 @@ PrintStmt::~PrintStmt() {
 }
 
 void PrintStmt::execute(EvalState &state, Program &) {
+    //std::cout << "print execute"<< std::endl;
     int value = exp->eval(state);
     std::cout << value << std::endl;
 }
@@ -111,4 +112,5 @@ void IfStmt::execute(EvalState &state, Program &program) {
  * ============================ */
 void EndStmt::execute(EvalState &, Program &program) {
     program.setEnd();
+    //rogram.setNextLine(-1);
 }

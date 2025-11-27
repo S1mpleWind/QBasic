@@ -42,7 +42,7 @@ public:
     // Clear program
     void clear();
 
-    void setEnd();       // mark program finished
+    void setEnd();         // mark program finished
     bool isEnded() const;  // query if execution should stop
 
     // interact with ui

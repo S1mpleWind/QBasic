@@ -171,4 +171,7 @@ class EndStmt : public Statement {
 public:
     EndStmt() {}
     void execute(EvalState &state, Program &program) override;
+    std::string toString() const override {
+        return "END";
+    }
 };

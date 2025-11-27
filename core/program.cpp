@@ -5,7 +5,10 @@
 
 
 // Constructor
-Program::Program() : nextLine(-1) {}
+Program::Program() : nextLine(-1) {
+    ended = false;
+    // FIXME: the eneded logic
+}
 
 // Destructor
 Program::~Program() {
@@ -88,6 +91,7 @@ void Program::clear() {
 
 void Program::setEnd(){
     ended = true;
+    nextLine = -1 ;
 }
 
 bool Program::isEnded() const{

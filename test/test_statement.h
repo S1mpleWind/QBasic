@@ -18,6 +18,8 @@ void testLetStmt() {
     LetStmt stmt("X", new ConstantExp(42));
     stmt.execute(state, prog);
 
+    cout<<stmt.toString()<<endl;
+
     assert(state.getValue("X") == 42);
     cout << "[PASS] testLetStmt" << endl;
 }
