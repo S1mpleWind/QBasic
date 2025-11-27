@@ -9,11 +9,6 @@ RemStmt::RemStmt(const std::string &text) : text(text) {}
 
 void RemStmt::execute(EvalState &state, Program & program) {
     // No effect during runtime
-    RuntimeStats *rs = state.getRuntimeStats();
-    if (rs) {
-        int line = program.getNextLine();
-        rs->stmtExecCount[line]++;
-    }
 }
 
 std::string RemStmt::toSyntaxTree(const RuntimeStats * ,int indent)const{
@@ -36,11 +31,6 @@ LetStmt::~LetStmt() {
 void LetStmt::execute(EvalState &state, Program &program) {
 
     execCount++;
-    RuntimeStats *rs = state.getRuntimeStats();
-    if (rs) {
-        int line = program.getNextLine();
-        rs->stmtExecCount[line]++;
-    }
 
     int value = exp->eval(state);
     state.setValue(var, value);
@@ -76,11 +66,6 @@ void PrintStmt::execute(EvalState &state, Program & program) {
     //std::cout << "print execute"<< std::endl;
 
     execCount++;
-    RuntimeStats *rs = state.getRuntimeStats();
-    if (rs) {
-        int line = program.getNextLine();
-        rs->stmtExecCount[line]++;
-    }
 
     int value = exp->eval(state);
     std::cout << value << std::endl;
@@ -101,11 +86,6 @@ void InputStmt::execute(EvalState &state, Program &program) {
     int value;
 
     execCount++;
-    RuntimeStats *rs = state.getRuntimeStats();
-    if (rs) {
-        int line = program.getNextLine();
-        rs->stmtExecCount[line]++;
-    }
 
 
     while (true) {
@@ -141,12 +121,6 @@ void GotoStmt::execute(EvalState &state, Program &program) {
 
     execCount++;
 
-    RuntimeStats *rs = state.getRuntimeStats();
-    if (rs) {
-        int line = program.getNextLine();
-        rs->stmtExecCount[line]++;
-    }
-
     program.setNextLine(target); // check is set in program
 }
 
@@ -181,13 +155,6 @@ void IfStmt::execute(EvalState &state, Program &program) {
     else if (op == ">") cond = (l > r);
     else if (op == "<") cond = (l < r);
 
-    RuntimeStats *rs = state.getRuntimeStats();
-    if (rs) {
-        auto &entry = rs->ifStats[program.getNextLine()]; // 使用当前行号做键
-        if (cond) entry.second++; // then count
-        else entry.first++;       // if (fail) count
-        rs->stmtExecCount[program.getNextLine()]++; // 总执行次数也记录
-    }
     // NOTE: here nextline equals to currentline
 
     if (cond) {
@@ -216,12 +183,6 @@ std::string IfStmt::toSyntaxTree(const RuntimeStats * stats , int indent) const 
  * END Statement
  * ============================ */
 void EndStmt::execute(EvalState &state, Program &program) {
-
-    RuntimeStats *rs = state.getRuntimeStats();
-    if (rs) {
-        int line = program.getNextLine();
-        rs->stmtExecCount[line]++;
-    }
 
     program.setEnd();
     //rogram.setNextLine(-1);

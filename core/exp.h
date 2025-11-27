@@ -93,13 +93,11 @@ public:
 
     std::string getIdentifierName() override;
 
-    int getCount() {return useCount;}
 
     std::string toSyntaxTree(int) const override;
 
 private:
     std::string name;
-    int useCount = 0;
 };
 
 

@@ -39,12 +39,11 @@ int IdentifierExp::eval(EvalState &state) {
     if (!state.isDefined(name)) {
         throw std::runtime_error("VARIABLE NOT DEFINED: " + name);
     }
-    //useCount++;
 
     RuntimeStats *rs = state.getRuntimeStats();
     if (rs) {
         rs->identifierUseCount[name]++;  //use runtime stats to record the usage of name
-        std::cout<<rs ->identifierUseCount[name]<<std::endl;
+        //std::cout<<rs ->identifierUseCount[name]<<std::endl;
     }
     else{
         std::cout<<"rs not inited properly"<<std::endl;

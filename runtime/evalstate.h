@@ -22,12 +22,6 @@ struct RuntimeStats{
 
     // name->count
     std::map<std::string,int> identifierUseCount;
-
-    // line -> count (or statement pointer?)
-    std::map<int,int> stmtExecCount;
-
-    // IF ：line -> pair(ifFailCount, thenCount)
-    std::map<int,std::pair<int,int>> ifStats;
 };
 
 
