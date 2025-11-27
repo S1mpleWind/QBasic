@@ -36,14 +36,14 @@ std::string toString(Expression* exp) {
     return "<unknown>";
 }
 
-void test(const std::string &src) {
+void test(int line,const std::string &src) {
     Parser parser;
 
     //cout<<src;
 
     //cout<<"000000"<<endl;
 
-    Statement* stmt = parser.parseLine(10, src);
+    Statement* stmt = parser.parseLine(line, src);
 
     //cout << "1111"<<endl;
 
@@ -56,24 +56,27 @@ void test(const std::string &src) {
 
 int testParser() {
     //LET 测试
-    test("LET X = 1 + 2 * 3");
+    test(10 , "LET X = 1 + 2 * 3");
 
     // PRINT 测试
-    test("PRINT X + 5");
+    test(20 , "PRINT X + 5");
 
     // INPUT 测试
-    test("INPUT A");
+    test(10 ,"INPUT A");
 
     // IF 测试
-    test("IF X < 10 THEN 200");
+    test(10 , "IF X < 10 THEN 200");
 
     // GOTO 测试
-    test("GOTO 120");
+    test(10, "GOTO 120");
 
     //REM 测试
 
-    //FIXME: no entering? fixed , REM missing in tokenizer
-    test("REM this is a comment");
+    //FIXME: no entering?
+    //fixed , REM missing in tokenizer
+    test(20, "REM this is a comment");
+
+    test(30, "GOTO 1 ** 2 - 1 / 2 + 2 * 7 MOD 9");
 
     return 0;
 }

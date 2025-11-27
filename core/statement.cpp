@@ -75,7 +75,7 @@ GotoStmt::GotoStmt(int targetLine) : target(targetLine) {}
 
 void GotoStmt::execute(EvalState &, Program &program) {
     // Change program count
-    program.setNextLine(target);
+    program.setNextLine(target); // check is set in program
 }
 
 

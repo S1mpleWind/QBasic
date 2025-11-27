@@ -65,7 +65,10 @@ int Program::getNextLineNumber(int lineNumber) const {
 
 // Set next line number for execution
 void Program::setNextLine(int lineNumber) {
-    nextLine = lineNumber;
+
+    // TODO : legal checking
+    if (sourceLines.count(lineNumber)) nextLine = lineNumber;
+    else throw std::runtime_error("Goto none-exsiting line");
 }
 
 // Read next line number

@@ -71,6 +71,8 @@ Statement* Parser::parseInput(Tokenizer &tokenizer) {
 
 Statement* Parser::parseGoto(Tokenizer &tokenizer) {
     Token lineToken = tokenizer.getNextToken();
+
+    //TODO: The implementation now only focus on one number, expand it to expression later?
     if (lineToken.type != TokenType::NUMBER)
         throw std::runtime_error("Expected line number in GOTO");
     int target = std::stoi(lineToken.text);
