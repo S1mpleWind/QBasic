@@ -43,11 +43,11 @@ void Interpreter::run(Program &program) {
     while (current != -1 && !program.isEnded()) {
         Statement* stmt = program.getParsedStatement(current);
 
-        std::cout << "[DEBUG] current line: " << current
+        /*    std::cout << "[DEBUG] current line: " << current
                   << ", stmt ptr: " << stmt
                   << ", state addr:" << &state<< std::endl;
 
-
+        */
         // 如果 stmt 为 nullptr，直接跳到下一行
         if (!stmt) {
             current = program.getNextLineNumber(current);

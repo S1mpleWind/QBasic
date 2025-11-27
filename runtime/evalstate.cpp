@@ -4,9 +4,13 @@
 /*
  * Constructor / Destructor
  */
-EvalState::EvalState() {}
+EvalState::EvalState() {
+    runtimeStats = new RuntimeStats();
+}
 
-EvalState::~EvalState() {}
+EvalState::~EvalState() {
+    delete runtimeStats;
+}
 
 
 /*

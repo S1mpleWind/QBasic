@@ -1,6 +1,7 @@
 #include "exp.h"
 #include "../runtime/evalstate.h"
 #include <stdexcept>
+#include <iostream>
 #include <sstream>
 
 
@@ -43,6 +44,10 @@ int IdentifierExp::eval(EvalState &state) {
     RuntimeStats *rs = state.getRuntimeStats();
     if (rs) {
         rs->identifierUseCount[name]++;  //use runtime stats to record the usage of name
+        std::cout<<rs ->identifierUseCount[name]<<std::endl;
+    }
+    else{
+        std::cout<<"rs not inited properly"<<std::endl;
     }
 
     return state.getValue(name);
