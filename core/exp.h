@@ -30,7 +30,7 @@ public:
 
 
     //syntax tree
-    virtual std::string toSyntaxTree() const = 0;
+    virtual std::string toSyntaxTree(int indent =0) const = 0;
 
 
     /* Getter mothods for convenience
@@ -74,7 +74,7 @@ public:
 
     int getConstantValue() override;
 
-    std::string toSyntaxTree() const override;
+    std::string toSyntaxTree(int) const override;
 
 private:
     int value;
@@ -95,7 +95,7 @@ public:
 
     int getCount() {return useCount;}
 
-    std::string toSyntaxTree() const override;
+    std::string toSyntaxTree(int) const override;
 
 private:
     std::string name;
@@ -119,7 +119,7 @@ public:
     Expression* getLHS() override;
     Expression* getRHS() override;
 
-    std::string toSyntaxTree() const override;
+    std::string toSyntaxTree(int) const override;
 
 private:
     std::string op;         // Operator — 运算符

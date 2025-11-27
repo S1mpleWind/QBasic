@@ -16,6 +16,21 @@
  * Stores all runtime variable bindings.
  * Supports get/set operations.
  */
+
+
+struct RuntimeStats{
+
+    // name->count
+    std::map<std::string,int> identifierUseCount;
+
+    // line -> count (or statement pointer?)
+    std::map<int,int> stmtExecCount;
+
+    // IF ：line -> pair(ifFailCount, thenCount)
+    std::map<int,std::pair<int,int>> ifStats;
+};
+
+
 class EvalState {
 public:
     EvalState();
@@ -33,6 +48,16 @@ public:
     // Clear all variables
     void clear();
 
+
+    // runtimestats related
+    void setRuntimeStats(RuntimeStats* stats){ runtimeStats = stats; }
+    RuntimeStats* getRuntimeStats() const {return runtimeStats;}
+
 private:
     std::map<std::string, int> symbolTable;   // variable → value
+
+    RuntimeStats* runtimeStats = nullptr;
 };
+
+
+

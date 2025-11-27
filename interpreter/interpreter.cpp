@@ -115,3 +115,22 @@ void Interpreter::defaultAdvanceIfNeeded(Program &program, int currentLine) {
     int defaultNext = program.getNextLineNumber(currentLine);
     program.setNextLine(defaultNext);
 }
+
+
+std::string Interpreter::toSyntaxTree(Program& program) const{
+    std::string result;
+
+    int line = program.getFirstLineNumber();
+    while(line != -1) {
+        Statement* stmt = program.getParsedStatement(line);
+        if(stmt) {
+            // 每条语句调用其 toSyntaxTree 并传入缩进级别 0
+            result += std::to_string(line) + "\n";
+            result += stmt->toSyntaxTree(state.getRuntimeStats(),0);
+            result += "\n";
+        }
+        line = program.getNextLineNumber(line);
+    }
+
+    return result;
+}

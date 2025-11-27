@@ -24,7 +24,9 @@ int ConstantExp::getConstantValue(){
     return value;
 }
 
-
+std::string ConstantExp:: toSyntaxTree(int indent) const{
+    return indentHelper(indent) + std::to_string(value);
+}
 
 
 // -------- IdentifierExp --------
@@ -36,7 +38,13 @@ int IdentifierExp::eval(EvalState &state) {
     if (!state.isDefined(name)) {
         throw std::runtime_error("VARIABLE NOT DEFINED: " + name);
     }
-    useCount++;
+    //useCount++;
+
+    RuntimeStats *rs = state.getRuntimeStats();
+    if (rs) {
+        rs->identifierUseCount[name]++;  //use runtime stats to record the usage of name
+    }
+
     return state.getValue(name);
 }
 
@@ -52,6 +60,11 @@ ExpressionType IdentifierExp::type() {
 std::string IdentifierExp::getIdentifierName(){
     return name;
 }
+
+std::string IdentifierExp::toSyntaxTree(int indent) const {
+    return indentHelper(indent)  + name ;
+}
+
 
 // -------- CompoundExp --------
 
@@ -119,4 +132,13 @@ Expression* CompoundExp::getLHS(){
 
 Expression* CompoundExp::getRHS(){
     return rhs;
+}
+
+
+std::string CompoundExp::toSyntaxTree(int indent) const {
+    std::string s;
+    s += indentHelper(indent) + op + "\n";
+    s += lhs->toSyntaxTree(indent + 1) + "\n";
+    s += rhs->toSyntaxTree(indent + 1);
+    return s;
 }

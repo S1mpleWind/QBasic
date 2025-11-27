@@ -48,9 +48,14 @@ public:
     // Access EvalState (if UI or tests need direct access)
     EvalState &getState();
 
+
+    //syntax tree
+    //NOTE:only after running the program we can get the right syntax tree.
+    std::string toSyntaxTree(Program &program) const;
+
 private:
     EvalState state;
-    Program program;
+    //Program program;
     //Parser parser;
 
     // IO callbacks (may be nullptr)

@@ -35,7 +35,7 @@ public:
     virtual std::string toString() const = 0;
 
     //TODO: syntax tree
-    virtual std::string toSyntaxTree(int indent = 0 ) const = 0;
+    virtual std::string toSyntaxTree(const RuntimeStats * stats , int indent = 0 ) const = 0;
 
 protected:
     int execCount = 0; //for syntax tree
@@ -61,7 +61,7 @@ public:
         return "REM " + text;
     }
 
-    std::string toSyntaxTree(int indent) const override;
+    std::string toSyntaxTree(const RuntimeStats * stats , int indent) const override;
 
 private:
     std::string text;
@@ -83,7 +83,7 @@ public:
         return "LET " + var + " = " + exp->toString();
     }
 
-    std::string toSyntaxTree(int indent) const override;
+    std::string toSyntaxTree(const RuntimeStats * stats , int indent) const override;
 
 private:
     std::string var;
@@ -106,7 +106,7 @@ public:
         return "PRINT " + exp->toString();
     }
 
-    std::string toSyntaxTree(int indent) const override;
+    std::string toSyntaxTree(const RuntimeStats * stats , int indent) const override;
 
 
 private:
@@ -129,7 +129,7 @@ public:
         return "INPUT " + var;
     }
 
-    std::string toSyntaxTree(int indent) const override;
+    std::string toSyntaxTree(const RuntimeStats * stats , int indent) const override;
 
 private:
     std::string var;
@@ -151,7 +151,7 @@ public:
         return "GOTO " + std::to_string(target);
     }
 
-    std::string toSyntaxTree(int indent) const override;
+    std::string toSyntaxTree(const RuntimeStats * stats , int indent) const override;
 
 private:
     int target;
@@ -174,7 +174,7 @@ public:
         + " THEN " + std::to_string(target);
     }
 
-    std::string toSyntaxTree(int indent) const override;
+    std::string toSyntaxTree(const RuntimeStats * stats , int indent) const override;
 
 private:
     Expression *left;
@@ -200,4 +200,5 @@ public:
     std::string toString() const override {
         return "END";
     }
+    std::string toSyntaxTree(const RuntimeStats * stats , int indent) const override;
 };

@@ -80,10 +80,12 @@ void testInterpreter(){
 
     itp.run(p);
 
-    std::cout<<"running";
+    std::cout<<"running"<<std::endl;
 
 
+    std::string result = itp.toSyntaxTree(p);
 
+    std::cout<<result<<std::endl;
 
 
 }
