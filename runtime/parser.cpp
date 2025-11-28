@@ -32,6 +32,10 @@ Statement* Parser::parseLine(int lineNum, const std::string &line) {
         else if (first.text == "IF") {
             return parseIf(tokenizer);
         }
+        //FIXME:lack of END
+        else if(first.text == "END"){
+            return parseEnd(tokenizer);
+        }
         else {
             throw std::runtime_error("Unknown keyword: " + first.text);
         }
@@ -113,6 +117,10 @@ Statement* Parser::parseRem(Tokenizer &tokenizer) {
     return new RemStmt(comment);
 }
 
+
+Statement* Parser::parseEnd(Tokenizer &tokenizer){
+    return new EndStmt();
+}
 
 //----------------- parse the expression -----------------
 

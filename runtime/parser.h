@@ -33,6 +33,7 @@ private:
     Statement* parseIf(Tokenizer &tokenizer);
     Statement* parseRem(Tokenizer &tokenizer);
 
+    Statement* parseEnd(Tokenizer &tokenizer);
     /*  To parse a expression
      *  most important, using recusion here to construct the syntax tree
      *  here providing 3 functions to recursively build the expression tree

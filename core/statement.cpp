@@ -2,18 +2,19 @@
 #include "statement.h"
 #include <iostream>
 
+#include <QDebug>
 /* ============================
  * REM Statement
  * ============================ */
 RemStmt::RemStmt(const std::string &text) : text(text) {}
 
-void RemStmt::execute(EvalState &state, Program & program) {
+void RemStmt::execute(EvalState &state, Program &) {
     // No effect during runtime
 }
 
 std::string RemStmt::toSyntaxTree(const RuntimeStats * ,int indent)const{
     std::string s;
-    s+= indentFunc(indent) + "REM " + "text";
+    s+= indentFunc(indent) + "REM " + text;
     return s;
 }
 
@@ -28,7 +29,7 @@ LetStmt::~LetStmt() {
     delete exp;
 }
 
-void LetStmt::execute(EvalState &state, Program &program) {
+void LetStmt::execute(EvalState &state, Program &) {
 
     execCount++;
 
@@ -62,12 +63,15 @@ PrintStmt::~PrintStmt() {
     delete exp;
 }
 
-void PrintStmt::execute(EvalState &state, Program & program) {
+void PrintStmt::execute(EvalState &state, Program &) {
     //std::cout << "print execute"<< std::endl;
 
     execCount++;
 
     int value = exp->eval(state);
+
+    qDebug()<< value;
+
     std::cout << value << std::endl;
 }
 
@@ -82,27 +86,30 @@ std::string PrintStmt::toSyntaxTree(const RuntimeStats * ,int indent) const{
  * ============================ */
 InputStmt::InputStmt(const std::string &varName) : var(varName) {}
 
-void InputStmt::execute(EvalState &state, Program &program) {
-    int value;
-
+void InputStmt::execute(EvalState &state, Program &) {
     execCount++;
 
-
-    while (true) {
-        std::cout << " ? ";
-        std::string temp;
-        std::getline(std::cin, temp);
-
-        try {
-            value = std::stoi(temp);
-            break;
-        } catch (...) {
-            std::cout << "INVALID NUMBER" << std::endl;
-        }
+    if (!state.inputProvider) {
+        // 没有提供输入回调，抛异常或输出错误
+        if (state.outputConsumer) state.outputConsumer("No input provider set\n");
+        throw std::runtime_error("Input provider not set");
     }
 
-    state.setValue(var, value);
+    while (true) {
+        QString qinput = state.inputProvider(); // 这会在 worker 线程被 blocking 调用到主线程
+        std::string temp = qinput.toStdString();
+
+        try {
+            int value = std::stoi(temp);
+            state.setValue(var, value);
+            break;
+        } catch (...) {
+            if (state.outputConsumer) state.outputConsumer("INVALID NUMBER\n");
+            // loop 再次请求
+        }
+    }
 }
+
 
 std::string InputStmt::toSyntaxTree(const RuntimeStats * ,int indent) const{
     std::string s = "INPUT " + var;
@@ -116,7 +123,7 @@ std::string InputStmt::toSyntaxTree(const RuntimeStats * ,int indent) const{
  * ============================ */
 GotoStmt::GotoStmt(int targetLine) : target(targetLine) {}
 
-void GotoStmt::execute(EvalState &state, Program &program) {
+void GotoStmt::execute(EvalState &, Program &program) {
     // Change program count
 
     execCount++;
@@ -182,7 +189,7 @@ std::string IfStmt::toSyntaxTree(const RuntimeStats * stats , int indent) const 
 /* ============================
  * END Statement
  * ============================ */
-void EndStmt::execute(EvalState &state, Program &program) {
+void EndStmt::execute(EvalState &, Program &program) {
 
     program.setEnd();
     //rogram.setNextLine(-1);

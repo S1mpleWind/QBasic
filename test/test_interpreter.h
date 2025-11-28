@@ -2,6 +2,7 @@
 
 #include"../interpreter/interpreter.h"
 #include"../core/program.h"
+#include"../runtime/parser.h"
 #include<iostream>
 
 void testInterpreter(){
@@ -26,8 +27,8 @@ void testInterpreter(){
     // parse the prag by hand
     p.addSourceLine(10, "LET X = 1");
     p.addSourceLine(20, "PRINT X");
-    p.addSourceLine(30, "LET X = X + 1");
-    p.addSourceLine(40, "IF X < 5 THEN 20");
+    // p.addSourceLine(30, "LET X = X + 1");
+    // p.addSourceLine(40, "IF X < 5 THEN 20");
     p.addSourceLine(50, "END");
     // p.addSourceLine(30, "LET X = X + 1");
     // p.addSourceLine(40, "IF X < 5 THEN 20");
@@ -36,40 +37,34 @@ void testInterpreter(){
     std::cout<<"successfully loaded"<<std::endl;
 
     //std::cout<<p.getDisplayText()<<std::endl;
-
+    Parser parser;
     // 10 LET X = 1
     p.setParsedStatement(10,
-                         new LetStmt(
-                             "X",
-                             new ConstantExp(1)
-                             )
+                         parser.parseLine(10, "LET X = 1")
                          );
 
     p.setParsedStatement(20,
-                         new PrintStmt(
-                             new IdentifierExp("X")
-                             )
-                         );
+                         parser.parseLine(20,"PRINT X"));
 
-    p.setParsedStatement(30,
-                         new LetStmt(
-                             "X",
-                             new CompoundExp(
-                                 "+",
-                                 new IdentifierExp("X"),
-                                 new ConstantExp(1)
-                                 )
-                             )
-                         );
+    // p.setParsedStatement(30,
+    //                      new LetStmt(
+    //                          "X",
+    //                          new CompoundExp(
+    //                              "+",
+    //                              new IdentifierExp("X"),
+    //                              new ConstantExp(1)
+    //                              )
+    //                          )
+    //                      );
 
-    p.setParsedStatement(40,
-                         new IfStmt(
-                                 new IdentifierExp("X"),
-                                 "<",
-                                 new ConstantExp(5),
-                             20
-                             )
-                         );
+    // p.setParsedStatement(40,
+    //                      new IfStmt(
+    //                              new IdentifierExp("X"),
+    //                              "<",
+    //                              new ConstantExp(5),
+    //                          20
+    //                          )
+    //                      );
 
     p.setParsedStatement(50,
                          new EndStmt()

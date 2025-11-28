@@ -37,13 +37,14 @@ public:
     // Reset interpreter state (clears variable table)
     void reset();
 
-    // Set input callback: should return an integer when INPUT is needed
-    // Example: interpreter.setInputProvider([](){ return 123; });
-    void setInputProvider(std::function<int()> provider);
 
-    // Set output callback: receives string to display
-    // Example: interpreter.setOutputConsumer([](const QString &s){ uiAppend(s); });
-    void setOutputConsumer(std::function<void(const QString&)> consumer);
+    //TODO
+    void setInputProvider(std::function<QString()> f) {
+        state.inputProvider = std::move(f);
+    }
+    void setOutputConsumer(std::function<void(const QString&)> f) {
+        state.outputConsumer = std::move(f);
+    }
 
     // Access EvalState (if UI or tests need direct access)
     EvalState &getState();

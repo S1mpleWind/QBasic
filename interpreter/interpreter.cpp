@@ -9,13 +9,9 @@ Interpreter::Interpreter()
 
 Interpreter::~Interpreter() = default;
 
-void Interpreter::setInputProvider(std::function<int()> provider) {
-    inputProvider = provider;
-}
 
-void Interpreter::setOutputConsumer(std::function<void(const QString&)> consumer) {
-    outputConsumer = consumer;
-}
+
+
 
 EvalState &Interpreter::getState() {
     return state;

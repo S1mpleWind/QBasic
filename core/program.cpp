@@ -81,13 +81,20 @@ int Program::getNextLine() const {
 
 // Clear the program completely
 void Program::clear() {
-    sourceLines.clear();
+    // 1. delete 掉所有 parsedStatements 中的 Statement*
     for (auto &p : parsedStatements) {
-        delete p.second;
+        delete p.second;   // 重要：释放 AST 节点
     }
     parsedStatements.clear();
+
+    // 2. 清空源代码
+    sourceLines.clear();
+
+    // 3. 重置运行状态
     nextLine = -1;
+    ended = false;
 }
+
 
 void Program::setEnd(){
     ended = true;

@@ -71,7 +71,7 @@ Token Tokenizer::readIdentifier() {
 
     //FIXME: REM! found by unit test
     if (upper == "LET" || upper == "PRINT" || upper == "INPUT" ||
-        upper == "GOTO" || upper == "IF" || upper == "THEN" || upper == "END" || upper == "REM") {
+        upper == "GOTO" || upper == "IF" || upper == "THEN" || upper == "END" || upper == "REM" || upper == "END") {
         return Token(TokenType::KEYWORD, upper);
     }
 

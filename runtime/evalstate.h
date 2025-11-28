@@ -47,6 +47,11 @@ public:
     void setRuntimeStats(RuntimeStats* stats){ runtimeStats = stats; }
     RuntimeStats* getRuntimeStats() const {return runtimeStats;}
 
+
+    //NOTE: for qt
+    std::function<QString()> inputProvider;
+    std::function<void(const QString&)> outputConsumer;
+
 private:
     std::map<std::string, int> symbolTable;   // variable → value
 

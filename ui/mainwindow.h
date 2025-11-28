@@ -3,6 +3,12 @@
 
 #include <QMainWindow>
 
+#include "qtextbrowserstream.h"
+
+#include "../core/program.h"
+#include "../interpreter/interpreter.h"
+#include "../runtime/parser.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -15,6 +21,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void run();
+    void runParser(QString &);
+    //void runInterpreter();
+
+
 private slots:
     void on_cmdLineEdit_editingFinished();
 
@@ -25,5 +36,23 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    QTextBrowserStream *coutRedirect;
+
+    // console part
+    Program program{};
+    Interpreter interpreter{};
+    Parser parser{};
+
+    // code text -> program.source && parser -> program.setstatement ->interpreter run && syntax tree;
+
+
+    // NOTE : call this function every time before running
+    void resetAll(){
+        program.clear();
+        interpreter.reset();
+        parser = Parser();
+    };
+
 };
 #endif // MAINWINDOW_H
