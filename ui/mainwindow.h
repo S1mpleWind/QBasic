@@ -26,6 +26,13 @@ public:
     //void runInterpreter();
 
 
+    void showHelp();
+
+    void updateCodeDisplay();
+
+    void parseTextIntoProgram(const QString &text);
+    QString decodeTextFile(const QByteArray &raw);
+
 private slots:
     void on_cmdLineEdit_editingFinished();
 
@@ -41,7 +48,7 @@ private:
 
     // console part
     Program program{};
-    Interpreter interpreter{};
+    //Interpreter interpreter{};
     Parser parser{};
 
     // code text -> program.source && parser -> program.setstatement ->interpreter run && syntax tree;
@@ -50,7 +57,7 @@ private:
     // NOTE : call this function every time before running
     void resetAll(){
         program.clear();
-        interpreter.reset();
+        //interpreter.reset();
         parser = Parser();
     };
 

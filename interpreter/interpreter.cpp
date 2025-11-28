@@ -44,16 +44,13 @@ void Interpreter::run(Program &program) {
                   << ", state addr:" << &state<< std::endl;
 
         */
-        // 如果 stmt 为 nullptr，直接跳到下一行
+
         if (!stmt) {
             current = program.getNextLineNumber(current);
             program.setNextLine(current);
             continue;
         }
 
-        // 打印语法树
-        //std::cout << stmt->toString() << std::endl;
-        // 记录执行前的 nextLine
 
         int oldNext = current;
 
