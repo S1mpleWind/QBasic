@@ -9,60 +9,67 @@
 //#include "../runtime/parser.h"
 
 /**
- * Interpreter
- *
- * Drive Program execution using Statement::execute(EvalState&, Program&).
- * - Holds its own EvalState
- * - Supports run (full execution) and step (single statement)
- * - Provides hooks for input/output (callbacks) to be integrated with UI
- *
- * 注意：为了与现有 Statement/Program 解耦，本 Interpreter 不直接访问语句内部成员，
- * 而是通过 Statement::execute(...) 触发语句行为；语句若要使用 I/O 回调，需要从
- * 全局或 EvalState 中取得回调（可在语句实现中调用 Interpreter 提供的回调，或把回调注入到 EvalState）。
+ * Interpreter class
+ * 
+ * Drives program execution by iterating through statements and calling Statement::execute()
+ * Features:
+ * - Maintains EvalState for variable storage
+ * - Supports full run() and single-step step() execution modes
+ * - Provides I/O callbacks for UI integration
+ * - Does not directly access statement internals, uses polymorphic execute() interface
+ * 
+ * Note: For proper decoupling from Statement/Program, statements access I/O callbacks
+ * through EvalState or global registry. Callbacks injected via setters.
  */
 class Interpreter {
 public:
+    // Constructor and destructor
     Interpreter();
     ~Interpreter();
 
-    // 装载源码
-    //void loadProgram(const std::vector<std::string> &source);
-
-    // Run the program until end (returns when finished)
+    // Execution modes
+    
+    // Run program until completion or END statement
     void run(Program& program);
 
-    // Execute exactly one statement (return true if executed, false if program ended or no statement)
+    // Execute exactly one statement
+    // Returns: true if statement was executed, false if program ended or no statement
     bool step(Program &program);
 
-    // Reset interpreter state (clears variable table)
+    // Reset interpreter state: clears all variables and resets execution
     void reset();
 
-
-    //TODO
+    // I/O callback configuration
+    
+    // Set input provider callback (called by INPUT statements)
     void setInputProvider(std::function<QString()> f) {
         state.inputProvider = std::move(f);
     }
+    
+    // Set output consumer callback (called by PRINT statements)
     void setOutputConsumer(std::function<void(const QString&)> f) {
         state.outputConsumer = std::move(f);
     }
 
-    // Access EvalState (if UI or tests need direct access)
+    // State access
+    
+    // Get evaluation state (for direct access if needed by UI or tests)
     EvalState &getState();
 
-
-    //syntax tree
-    //NOTE:only after running the program we can get the right syntax tree.
+    // Debugging support
+    
+    // Get syntax tree representation (use after running program)
+    // Shows execution counts and structure
     std::string toSyntaxTree(Program &program) const;
 
 private:
-    EvalState state;
-    //Program program;
-    //Parser parser;
+    EvalState state;                                // Variable bindings and runtime state
+    
+    // I/O callbacks (may be nullptr if not configured)
+    std::function<int()> inputProvider;             // Provides input for INPUT statement
+    std::function<void(const QString&)> outputConsumer;  // Consumes output from PRINT statement
 
-    // IO callbacks (may be nullptr)
-    std::function<int()> inputProvider;
-    std::function<void(const QString&)> outputConsumer;
-
-    // Internal helpers
+    // Internal helper method
+    // Advance to next line if needed (used after conditional branches)
     void defaultAdvanceIfNeeded(Program &program, int currentLine);
 };

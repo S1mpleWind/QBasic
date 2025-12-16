@@ -1,43 +1,43 @@
 // program.cpp
+// Implementation of Program class for managing BASIC program structure
 
 #include "program.h"
 #include "statement.h"
 
-
-// Constructor
+// Constructor: initialize program with no lines and not ended
 Program::Program() : nextLine(-1) {
     ended = false;
-    // FIXME: the eneded logic
 }
 
-// Destructor
+// Destructor: clean up all statements
 Program::~Program() {
     clear();
 }
 
-// Add or replace a source line
+// Add or update a source line at given line number
 void Program::addSourceLine(int lineNumber, const std::string &line) {
     sourceLines[lineNumber] = line;
 }
 
-// Remove line and parsed statement
+// Remove source line and its parsed statement
 void Program::removeSourceLine(int lineNumber) {
     sourceLines.erase(lineNumber);
 
+    // Also delete parsed statement if exists
     if (parsedStatements.count(lineNumber)) {
         delete parsedStatements[lineNumber];
         parsedStatements.erase(lineNumber);
     }
 }
 
-// Get raw source line
+// Retrieve raw source code line by line number
 std::string Program::getSourceLine(int lineNumber) const {
     if (sourceLines.count(lineNumber))
         return sourceLines.at(lineNumber);
     return "";
 }
 
-// Store parsed statement
+// Store parsed statement AST for a line number
 void Program::setParsedStatement(int lineNumber, Statement *stmt) {
     // Delete old statement if exists
     if (parsedStatements.count(lineNumber))

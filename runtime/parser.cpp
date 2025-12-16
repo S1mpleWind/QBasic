@@ -2,20 +2,21 @@
 #include <iostream>
 #include <stdexcept>
 
+// Parse one line of BASIC source code and return corresponding Statement
+// Dispatches to specific statement parsers based on keyword
 Statement* Parser::parseLine(int lineNum, const std::string &line) {
-    //std::cout<<"entering line";
     Tokenizer tokenizer(line);
+    
+    // Empty line: return null statement
     if (!tokenizer.hasMoreToken()) return nullptr;
 
-    //std::cout<<"bf tk"<<std::endl;
+    // Get first token to identify statement type
     Token first = tokenizer.getNextToken();
 
-    //std::cout<<first.text;
-
     if (first.type == TokenType::KEYWORD) {
+        // Dispatch to appropriate statement parser
         if (first.text == "REM") {
-            //std::cout<<"rem situation";
-            return parseRem(tokenizer);  // REM 处理
+            return parseRem(tokenizer);
         }
         else if (first.text == "LET") {
             return parseLet(tokenizer);
@@ -32,70 +33,81 @@ Statement* Parser::parseLine(int lineNum, const std::string &line) {
         else if (first.text == "IF") {
             return parseIf(tokenizer);
         }
-        //FIXME:lack of END
-        else if(first.text == "END"){
+        else if (first.text == "END") {
             return parseEnd(tokenizer);
         }
         else {
             throw std::runtime_error("Unknown keyword: " + first.text);
         }
     } else {
-        // 允许省略 LET，直接 var = expr
-        tokenizer.reset();  // rewind
+        // Implicit LET: allow variable assignment without LET keyword
+        tokenizer.reset();  // Rewind to start
         return parseLet(tokenizer);
     }
 }
 
-//----------------- 各语句解析框架 -----------------
-
 Statement* Parser::parseLet(Tokenizer &tokenizer) {
+    // Parse variable name
     Token var = tokenizer.getNextToken();
     if (var.type != TokenType::IDENTIFIER)
         throw std::runtime_error("Expected identifier in LET");
 
+    // Parse assignment operator
     Token eq = tokenizer.getNextToken();
     if (eq.type != TokenType::OPERATOR || eq.text != "=")
         throw std::runtime_error("Expected '=' in LET");
 
+    // Parse right-hand side expression
     Expression* exp = parseExpression(tokenizer);
     return new LetStmt(var.text, exp);
 }
 
+// Parse PRINT statement
 Statement* Parser::parsePrint(Tokenizer &tokenizer) {
+    // Parse expression to print
     Expression* exp = parseExpression(tokenizer);
     return new PrintStmt(exp);
 }
 
+// Parse INPUT statement
 Statement* Parser::parseInput(Tokenizer &tokenizer) {
+    // Parse target variable
     Token var = tokenizer.getNextToken();
     if (var.type != TokenType::IDENTIFIER)
         throw std::runtime_error("Expected identifier in INPUT");
     return new InputStmt(var.text);
 }
 
+// Parse GOTO statement
 Statement* Parser::parseGoto(Tokenizer &tokenizer) {
+    // Parse target line number
     Token lineToken = tokenizer.getNextToken();
 
-    //TODO: The implementation now only focus on one number, expand it to expression later?
     if (lineToken.type != TokenType::NUMBER)
         throw std::runtime_error("Expected line number in GOTO");
     int target = std::stoi(lineToken.text);
     return new GotoStmt(target);
 }
 
+// Parse IF/THEN statement
 Statement* Parser::parseIf(Tokenizer &tokenizer) {
+    // Parse left operand
     Expression* left = parseExpression(tokenizer);
 
+    // Parse relational operator
     Token op = tokenizer.getNextToken();
     if (op.type != TokenType::OPERATOR)
         throw std::runtime_error("Expected operator in IF");
 
+    // Parse right operand
     Expression* right = parseExpression(tokenizer);
 
+    // Parse THEN keyword
     Token thenToken = tokenizer.getNextToken();
     if (thenToken.type != TokenType::KEYWORD || thenToken.text != "THEN")
         throw std::runtime_error("Expected THEN in IF");
 
+    // Parse target line number
     Token lineToken = tokenizer.getNextToken();
     if (lineToken.type != TokenType::NUMBER)
         throw std::runtime_error("Expected line number after THEN");

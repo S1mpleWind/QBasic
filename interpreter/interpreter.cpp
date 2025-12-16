@@ -1,41 +1,36 @@
 #include "interpreter.h"
 #include <iostream>
 
+// Constructor: initialize interpreter with empty state
 Interpreter::Interpreter()
-    : state(),inputProvider(nullptr),
-    outputConsumer(nullptr){
-    ;
+    : state(), inputProvider(nullptr),
+    outputConsumer(nullptr) {
 }
 
+// Destructor
 Interpreter::~Interpreter() = default;
 
-
-
-
-
+// Get reference to evaluation state
 EvalState &Interpreter::getState() {
     return state;
 }
 
+// Reset interpreter: clear all variables and state
 void Interpreter::reset() {
-    // Try to clear EvalState: we call clear() if exists, otherwise reassign a fresh EvalState.
-    // Many EvalState implementations provide clear() or constructor default behavior.
-    // We use placement: reinitialize by assignment.
+    // Create fresh EvalState by reassignment
     state = EvalState();
 }
 
-
-
+// Execute program to completion
 void Interpreter::run(Program &program) {
-    //FIXME: wrong logic,updated
-
+    // Get first line number and set as next line to execute
     int first = program.getFirstLineNumber();
     program.setNextLine(first);
 
-
+    // Get current line
     int current = program.getNextLine();
 
-
+    // Execute until program ends or END statement
     while (current != -1 && !program.isEnded()) {
         Statement* stmt = program.getParsedStatement(current);
 

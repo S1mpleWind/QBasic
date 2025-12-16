@@ -4,82 +4,93 @@
 #include <iostream>
 #include <sstream>
 
+// ============ ConstantExp Implementation ============
 
-// -------- ConstantExp --------
-
+// Constructor: initialize with constant value
 ConstantExp::ConstantExp(int v) : value(v) {}
 
+// Evaluation: return the constant value
 int ConstantExp::eval(EvalState &state) {
     return value;
 }
 
+// String representation: numeric value
 std::string ConstantExp::toString() const {
     return std::to_string(value);
 }
 
+// Type: always CONSTANT
 ExpressionType ConstantExp::type() {
     return ExpressionType::CONSTANT;
 }
 
+// Get constant value
 int ConstantExp::getConstantValue(){
     return value;
 }
 
+// Syntax tree representation
 std::string ConstantExp:: toSyntaxTree(int indent) const{
     return indentHelper(indent) + std::to_string(value);
 }
 
+// ============ IdentifierExp Implementation ============
 
-// -------- IdentifierExp --------
-
+// Constructor: initialize with variable name
 IdentifierExp::IdentifierExp(const std::string &n) : name(n) {}
 
+// Evaluation: look up variable value in symbol table
 int IdentifierExp::eval(EvalState &state) {
-    // If variable not defined, throw error
+    // Check if variable is defined
     if (!state.isDefined(name)) {
         throw std::runtime_error("VARIABLE NOT DEFINED: " + name);
     }
 
+    // Track identifier usage in runtime statistics
     RuntimeStats *rs = state.getRuntimeStats();
     if (rs) {
-        rs->identifierUseCount[name]++;  //use runtime stats to record the usage of name
-        //std::cout<<rs ->identifierUseCount[name]<<std::endl;
-    }
-    else{
-        std::cout<<"rs not inited properly"<<std::endl;
+        rs->identifierUseCount[name]++;  // Increment usage count
+    } else {
+        std::cout << "rs not initialized properly" << std::endl;
     }
 
+    // Return variable value
     return state.getValue(name);
 }
 
+// String representation: variable name
 std::string IdentifierExp::toString() const {
     return name;
 }
 
+// Type: always IDENTIFIER
 ExpressionType IdentifierExp::type() {
     return ExpressionType::IDENTIFIER;
 }
 
-
-std::string IdentifierExp::getIdentifierName(){
+// Get identifier name
+std::string IdentifierExp::getIdentifierName() {
     return name;
 }
 
+// Syntax tree representation
 std::string IdentifierExp::toSyntaxTree(int indent) const {
-    return indentHelper(indent)  + name ;
+    return indentHelper(indent) + name;
 }
 
+// ============ CompoundExp Implementation ============
 
-// -------- CompoundExp --------
-
+// Constructor: create binary expression with operator and operands
 CompoundExp::CompoundExp(const std::string &o, Expression *l, Expression *r)
     : op(o), lhs(l), rhs(r) {}
 
+// Destructor: clean up operand expressions
 CompoundExp::~CompoundExp() {
     delete lhs;
     delete rhs;
 }
 
+// Evaluation: recursively evaluate operands and apply operator
 int CompoundExp::eval(EvalState &state) {
 
     // recursion here
