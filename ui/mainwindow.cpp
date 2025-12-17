@@ -272,24 +272,9 @@ void MainWindow::showHelp()
 
 
 void MainWindow::updateCodeDisplay(){
-    int firstline = program.getFirstLineNumber();
-    if (firstline < 0 ) return;
-
-    std::string sortedSourceCode;
-
-    program.setNextLine(firstline);
-
-    int currentline = program.getNextLine();
-
-    while(currentline!= -1 && ! program.isEnded()){
-        sortedSourceCode += std::to_string(currentline)+" "
-                            + program.getSourceLine(currentline)
-                            + "\n";
-
-        currentline = program.getNextLineNumber(currentline);
-    }
-
-    ui->CodeDisplay->setText(QString::fromStdString(sortedSourceCode));
+    // 显示源代码应与运行状态无关，避免在程序结束后被清空
+    std::string display = program.getDisplayText();
+    ui->CodeDisplay->setText(QString::fromStdString(display));
 }
 
 

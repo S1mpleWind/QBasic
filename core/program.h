@@ -60,6 +60,8 @@ public:
 
     // Mark program as finished (for END statement)
     void setEnd();
+    // used to recover when finishing a round of running
+    void recoverEnd(){ended=false;}
     
     // Check if program execution should stop
     bool isEnded() const;

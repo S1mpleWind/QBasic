@@ -64,6 +64,8 @@ void Interpreter::run(Program &program) {
 
         current = program.getNextLine();
     }
+    //TODO: after a round of running, reset the program to 'unend'
+    program.recoverEnd();
 }
 
 
