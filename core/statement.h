@@ -30,6 +30,8 @@ public:
     // Convert statement to syntax tree visualization
     virtual std::string toSyntaxTree(const RuntimeStats * stats, int indent = 0) const = 0;
 
+    void resetCount() {execCount = 0;}
+
 protected:
     int execCount = 0;  // Track execution count for debugging
 

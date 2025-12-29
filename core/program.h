@@ -41,6 +41,8 @@ public:
     // Retrieve parsed statement for a line number
     Statement *getParsedStatement(int lineNumber) const;
 
+    void resetStateCount();
+
     // Line navigation
     // Get first executable line number in program
     int getFirstLineNumber() const;

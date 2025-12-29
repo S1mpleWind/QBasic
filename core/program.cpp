@@ -117,3 +117,9 @@ std::string Program::getDisplayText()
     }
     return rawText;
 }
+
+void Program::resetStateCount(){
+    for (auto &p : parsedStatements) {
+        p.second->resetCount();   // Important reset count
+    }
+}

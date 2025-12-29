@@ -146,6 +146,8 @@ void MainWindow::on_btnClearCode_clicked()
 }
 
 void MainWindow::on_btnRunCode_clicked(){
+    ui->textBrowser->clear();
+    program.resetStateCount();
     run();
 }
 
@@ -240,7 +242,7 @@ void MainWindow::runParser(QString & qline)
     Statement* stmt = parser.parseLine(lineNumber, code);
 
     if (stmt == nullptr) {
-        ui->textBrowser->append("语句解析失败");
+        ui->textBrowser->append("语句解析失败\n");
         return;
     }
     qDebug()<<stmt->toString();
