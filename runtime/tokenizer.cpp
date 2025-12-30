@@ -17,6 +17,30 @@ bool Tokenizer::hasMoreToken() {
     return pos < (int)src.size();
 }
 
+// Static helper: check if a string is a valid C++ style identifier
+bool Tokenizer::isValidIdentifier(const std::string &name) {
+    if (name.empty()) return false;
+    
+    // First character must be a letter or underscore
+    if (!std::isalpha(name[0]) && name[0] != '_') return false;
+    
+    // Subsequent characters must be letters, digits, or underscores
+    for (size_t i = 1; i < name.size(); ++i) {
+        if (!std::isalnum(name[i]) && name[i] != '_') return false;
+    }
+
+    // Check if it's a reserved keyword or operator
+    std::string upper;
+    for (char c : name) upper += std::toupper(c);
+    if (upper == "LET" || upper == "PRINT" || upper == "INPUT" ||
+        upper == "GOTO" || upper == "IF" || upper == "THEN" || 
+        upper == "END" || upper == "REM" || upper == "MOD") {
+        return false;
+    }
+    
+    return true;
+}
+
 // Get current character without consuming
 char Tokenizer::current() const {
     if (pos >= (int)src.size()) return '\0';
@@ -54,8 +78,8 @@ Token Tokenizer::getNextToken() {
     // Numeric literal
     if (std::isdigit(c)) return readNumber();
 
-    // Identifier or keyword
-    if (std::isalpha(c)) return readIdentifier();
+    // Identifier or keyword (starts with letter or underscore)
+    if (std::isalpha(c) || c == '_') return readIdentifier();
 
     // Operator
     return readOperator();
@@ -71,7 +95,7 @@ Token Tokenizer::readNumber() {
 // Parse identifier or keyword
 Token Tokenizer::readIdentifier() {
     std::string result;
-    while (std::isalnum(current())) result += get();
+    while (std::isalnum(current()) || current() == '_') result += get();
 
     // Convert to uppercase for keyword matching
     std::string upper;

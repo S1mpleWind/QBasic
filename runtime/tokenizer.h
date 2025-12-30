@@ -33,6 +33,9 @@ public:
     // Check if there are more tokens to process
     bool hasMoreToken();
 
+    // Static helper: check if a string is a valid C++ style identifier
+    static bool isValidIdentifier(const std::string &name);
+
 private:
     std::string src;        // Source code string being tokenized
     int pos;                // Current position/cursor in source string

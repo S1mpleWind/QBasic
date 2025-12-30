@@ -1,5 +1,6 @@
 #include "exp.h"
 #include "../runtime/evalstate.h"
+#include "../runtime/tokenizer.h"
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
@@ -37,7 +38,11 @@ std::string ConstantExp:: toSyntaxTree(int indent) const{
 // ============ IdentifierExp Implementation ============
 
 // Constructor: initialize with variable name
-IdentifierExp::IdentifierExp(const std::string &n) : name(n) {}
+IdentifierExp::IdentifierExp(const std::string &n) : name(n) {
+    if (!Tokenizer::isValidIdentifier(n)) {
+        throw std::runtime_error("INVALID IDENTIFIER: " + n);
+    }
+}
 
 // Evaluation: look up variable value in symbol table
 int IdentifierExp::eval(EvalState &state) {

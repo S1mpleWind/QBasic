@@ -1,6 +1,7 @@
 // statement.cpp
 // Implementation of BASIC statement classes
 #include "statement.h"
+#include "../runtime/tokenizer.h"
 #include <iostream>
 
 #include <QDebug>
@@ -27,7 +28,11 @@ std::string RemStmt::toSyntaxTree(const RuntimeStats * , int indent) const {
 
 // Constructor: create assignment with variable name and expression
 LetStmt::LetStmt(const std::string &varName, Expression *exp)
-    : var(varName), exp(exp) {}
+    : var(varName), exp(exp) {
+    if (!Tokenizer::isValidIdentifier(varName)) {
+        throw std::runtime_error("INVALID IDENTIFIER: " + varName);
+    }
+}
 
 // Destructor: clean up expression
 LetStmt::~LetStmt() {
@@ -92,7 +97,11 @@ std::string PrintStmt::toSyntaxTree(const RuntimeStats *, int indent) const {
 // INPUT: read integer from user input
 
 // Constructor: create input statement for variable
-InputStmt::InputStmt(const std::string &varName) : var(varName) {}
+InputStmt::InputStmt(const std::string &varName) : var(varName) {
+    if (!Tokenizer::isValidIdentifier(varName)) {
+        throw std::runtime_error("INVALID IDENTIFIER: " + varName);
+    }
+}
 
 // Execute: read integer from input and store in variable
 void InputStmt::execute(EvalState &state, Program &) {
