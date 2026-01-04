@@ -115,7 +115,7 @@ std::string Interpreter::toSyntaxTree(Program& program) const{
         Statement* stmt = program.getParsedStatement(line);
         if(stmt) {
             // 每条语句调用其 toSyntaxTree 并传入缩进级别 0
-            result += std::to_string(line) + "\n";
+            result += std::to_string(line) + " ";
             result += stmt->toSyntaxTree(state.getRuntimeStats(),0);
             result += "\n";
         }

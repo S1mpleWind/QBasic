@@ -14,12 +14,13 @@ RemStmt::RemStmt(const std::string &text) : text(text) {}
 // Execute: comment statements have no effect
 void RemStmt::execute(EvalState &state, Program &) {
     // No effect during runtime
+    execCount++;
 }
 
 // Syntax tree representation for REM
 std::string RemStmt::toSyntaxTree(const RuntimeStats * , int indent) const {
     std::string s;
-    s += indentFunc(indent) + "REM " + text;
+    s += indentFunc(indent) + "REM " + std::to_string(execCount) + "\n" + text + "\n";
     return s;
 }
 

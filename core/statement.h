@@ -53,7 +53,7 @@ public:
 
     // String representation
     std::string toString() const override {
-        return "REM " + text;
+        return "REM " + text + "\n";
     }
 
     // Syntax tree representation
