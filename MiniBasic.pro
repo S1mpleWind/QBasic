@@ -8,3 +8,5 @@ SUBDIRS += core \
 
 test.depends = core runtime
 ui.depends = core runtime
+
+# 如果编译失败，检查在子文件的pro文件里，使用的lib的路径
